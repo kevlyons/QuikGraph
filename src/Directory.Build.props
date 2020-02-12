@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+  <Import Project="./PackagesGeneration.props" />
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <!-- Include PDB files in NuGet for Source Link because symbolsource.org does not support portable PDBs -->
