@@ -42,12 +42,12 @@ environment:
     - GIT_TAG: true
 
 # Setup build version
-init:
+install:
 - ps: >-
+    ./build/updatePackagesGeneration.ps1;
+    
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
-        $env:Build_Version = "$($env:APPVEYOR_REPO_TAG_NAME.Replace('v', ''))";
-        $env:Build_Assembly_Version = $env:Build_Version;
         $env:IsFullIntegrationBuild = $true;
     }
     else
@@ -55,10 +55,11 @@ init:
         $env:Build_Version = "$($env:APPVEYOR_BUILD_VERSION)";
         $env:Build_Assembly_Version = "$env:Build_Version" -replace "\-.*","";
         $env:IsFullIntegrationBuild = "$env:APPVEYOR_PULL_REQUEST_NUMBER" -eq "" -And $env:Configuration -eq "Release";
+        
+        "Building version: $env:Build_Version";
+        "Building assembly version: $env:Build_Assembly_Version";
     }
     
-    "Building version: $env:Build_Version";
-    "Building assembly version: $env:Build_Assembly_Version";
     if ($env:IsFullIntegrationBuild -eq $true)
     {
         "With full integration";
@@ -187,7 +188,7 @@ artifacts:
 # Documentation
 before_deploy:
 # Release documentation
-  - ps: ./releaseDoc.ps1
+  - ps: ./build/releaseDoc.ps1
 
 # Deploy
 deploy:
